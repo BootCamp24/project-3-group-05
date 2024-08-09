@@ -48,6 +48,7 @@ class SQLHelper():
                     SELECT
                         "Total Cases",
                         "Total Deaths",
+                        "Total Recovered",
                         Continent,
                         Country
                                             
@@ -57,8 +58,8 @@ class SQLHelper():
                         "Total Cases" >= {min_total_cases} AND
                     {where_clause}
                     Order by 
-                        "Total Cases" DESC;
-                    
+                        "Total Cases" DESC
+                    LIMIT 10;
                     """
         df = pd.read_sql(text(query), con = self.engine)
         data = df.to_dict(orient="records")
