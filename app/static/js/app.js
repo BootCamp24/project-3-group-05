@@ -10,7 +10,7 @@ function do_work() {
   
       // create the graphs
       make_stack(data.stack_data);
-    //   make_sunburst(data.sunburst_data);
+      make_sunburst(data.sunburst_data);
       make_table(data.table_data)
     });
   }
@@ -97,7 +97,53 @@ function do_work() {
     Plotly.newPlot("bar_chart", data, layout);
   
   }
+  function make_sunburst(filtered_data) {
+    // sort values
+    // filtered_data.sort((a, b) => (b["Total Cases"] - a["Total Cases"]));
+  
+    // extract the x & y values for our bar chart
+    let label_country = filtered_data.map(x => x.Country);
+    let parent_continent = filtered_data.map(x => x.Continent);
+    let values_cases = filtered_data.map(x => x["Total Cases"]);
+    console.log(label_country)
+    console.log(parent_continent)
+    console.log(values_cases)
+  
+    // Trace1 for the Launch Attempts
+    let trace1 = {
+      type: "sunburst",
+      labels: label_country,
+      parents: parent_continent,
+      values: values_cases,
 
+      outsidetextfont: { size: 20, color: "#377eb8" },
+      // leaf: { opacity: 0.4 },
+      
+    };
+  
+  
+    // // Create data array
+    let data = [trace1];
+  
+    // Apply a title to the layout
+    let layout = {
+      title: "Covid Analysis"
+      // barmode: "group",
+      // Include margins in the layout so the x-tick labels display correctly
+      // margin: {
+      //   l: 0,
+      //   r: 0,
+      //   b: 0,
+      //   t: 50,
+      // },
+      // width : 600,
+      // height :600
+    };
+  
+    // Render the plot to the div tag with id "plot"
+    Plotly.newPlot("sunburst_chart", data, layout);
+  
+  }
     // function make_stack(filtered_data) {
     //         // sort values
     //         // filtered_data.sort((a, b) => (b["Total Cases"] - a["Total Cases"]));

@@ -90,8 +90,7 @@ class SQLHelper():
                     Where
                         "Total Cases" >= {min_total_cases} AND
                     {where_clause}
-                    Order by 
-                        "Total Cases" DESC;
+                    ;
                     
                     """
         df = pd.read_sql(text(query), con = self.engine)
