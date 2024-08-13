@@ -49,10 +49,10 @@ def get_dashboard(min_total_cases,user_continent):
     }
     return(jsonify(data))
 
-@app.route("/api/v1.0/get_map/<min_total_cases>/<user_continent>")
-def get_map(min_total_cases,user_continent):
+@app.route("/api/v1.0/get_map")
+def get_map():
 
-    map_data = sql.get_map(min_total_cases,user_continent)
+    map_data = sql.get_map()
 
     return(jsonify(map_data))
 

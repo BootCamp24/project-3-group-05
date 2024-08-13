@@ -16,6 +16,8 @@ function do_work() {
   }
   
   function make_table(filtered_data) {
+    // re-init the datatable
+    $('#data_table').DataTable().clear().destroy();
     // select table
     let table = d3.select("#data_table");
     let table_body = table.select("tbody");
@@ -24,12 +26,11 @@ function do_work() {
 
     // create table
     for (let i = 0; i < filtered_data.length; i++){
-      // re-init the datatable
-      $('#data_table').DataTable().clear().destroy();
+     
 
       // get data row
       let data_row = filtered_data[i];
-      // re-init the datatable
+// 
       
       // creates new row in the table
       let row = table_body.append("tr");

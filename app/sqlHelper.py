@@ -147,17 +147,13 @@ class SQLHelper():
         data = df.to_dict(orient="records")
         return(data)        
     
-    def get_map(self, min_total_cases, user_continent):
+    def get_map(self):
 # user inputs
         # user_continent = 'North America'
         # min_total_cases = 10000
 
         # switch on user_region
-        if user_continent == 'All':
-            where_clause = "1=1"
-        else:
-            where_clause = f"Continent = '{user_continent}'"
-
+       
         query = f"""
                     SELECT
                         "Population",
@@ -167,38 +163,16 @@ class SQLHelper():
                         "Total Deaths",
                         "Total Recovered",
                         Continent,
-                        Country
+                        Country,
+                        latitude, 
+                        longitude
                                             
                     From 
                         covid
-                    Where
-                        "Total Cases" >= {min_total_cases} AND
-                    {where_clause}
-                    Order by 
-                        "Total Cases" DESC;
+                    ;
                     
                     """
         df = pd.read_sql(text(query), con = self.engine)
         data = df.to_dict(orient="records")
         return(data)
     
-    # query = f"""
-    #                 SELECT
-    #                     "Population",
-    #                     "Total Test",
-    #                     "Total Cases",
-    #                     "Active Cases",
-    #                     "Total Deaths",
-    #                     "Total Recovered",
-    #                     Continent,
-    #                     Country
-                                            
-    #                 From 
-    #                     covid
-    #                 Where
-    #                     "Total Cases" >= {min_total_cases} AND
-    #                 {where_clause}
-    #                 Order by 
-    #                     "Total Cases" DESC;
-                    
-    #                 """
