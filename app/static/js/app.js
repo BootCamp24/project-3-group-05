@@ -24,9 +24,13 @@ function do_work() {
 
     // create table
     for (let i = 0; i < filtered_data.length; i++){
+      // re-init the datatable
+      $('#data_table').DataTable().clear().destroy();
+
       // get data row
       let data_row = filtered_data[i];
-  
+      // re-init the datatable
+      
       // creates new row in the table
       let row = table_body.append("tr");
       row.append("td").text(data_row.Continent);
@@ -38,7 +42,8 @@ function do_work() {
       row.append("td").text(data_row["Total Recovered"]);
       row.append("td").text(data_row["Total Test"]);
     }
-    table_body.append("caption").text("COVID-19 Data by Country");
+    // Create the datatable
+    $('#data_table').DataTable();
   }
   
   function make_stack(filtered_data) {
@@ -126,9 +131,9 @@ function do_work() {
       parents: parent_continent,
       values: values_cases,
       branchvalues:"total",
-      // outsidetextfont: { size: 20, color: "#377eb8" },
-      // leaf: { opacity: 0.6 },
-      marker: {line: {width: 2}}
+      marker: {
+        colors: ["#9CF4E4", "#83C9BC", "#619F94", "#358F7F", "#2ECAAE", "#244B7F"]
+      }
       
     };
     
@@ -141,24 +146,18 @@ function do_work() {
     let layout = {
       title: {
         text: "Covid SunBurst Chart for the World",
-        colorway: ["#9CF4E4 ", "#83C9BC ", "#619F94", "#358F7F", "#2ECAAE", "#244B7F"]
+
         // font: {
         //     size: 16, // Adjust the font size if needed
         //     color: 'black', // Specify the font color if needed
         //     family: 'Arial', // Specify the font family if needed
         //     weight: 'bold' // Make the font bold
         // }
+        // colorway: ["#9CF4E4 ", "#83C9BC ", "#619F94", "#358F7F", "#2ECAAE", "#244B7F"]
       },
 
      
-      // barmode: "group",
-      // Include margins in the layout so the x-tick labels display correctly
-      // margin: {
-      //   l: 0,
-      //   r: 0,
-      //   b: 0,
-      //   t: 50,
-      // },
+
       width : 550,
       height :550
     };
