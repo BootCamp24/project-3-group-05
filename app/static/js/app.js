@@ -20,7 +20,8 @@ function do_work() {
     let table = d3.select("#data_table");
     let table_body = table.select("tbody");
     table_body.html(""); // destroy any existing rows
-  
+    // Add a table caption with the title
+
     // create table
     for (let i = 0; i < filtered_data.length; i++){
       // get data row
@@ -29,7 +30,7 @@ function do_work() {
       // creates new row in the table
       let row = table_body.append("tr");
       row.append("td").text(data_row.Continent);
-      row.append("td").text(data_row.Country);
+      row.append("td").text(data_row.Country || "N/A");
       row.append("td").text(data_row.Population);
       row.append("td").text(data_row["Total Cases"]);
       row.append("td").text(data_row["Active Cases"]);
@@ -37,6 +38,7 @@ function do_work() {
       row.append("td").text(data_row["Total Recovered"]);
       row.append("td").text(data_row["Total Test"]);
     }
+    table_body.append("caption").text("COVID-19 Data by Country");
   }
   
   function make_stack(filtered_data) {
@@ -55,7 +57,7 @@ function do_work() {
       y: bar_y1,
       type: 'bar',
       marker: {
-        color: "skyblue"
+        color: "#B5EFE5"
       },
       text: bar_text,
       name: "Total Recovered"
@@ -67,7 +69,7 @@ function do_work() {
       y: bar_y2,
       type: 'bar',
       marker: {
-        color: "firebrick"
+        color: "#5A8B82"
       },
       text: bar_text,
       name: "Total Deaths"
@@ -78,7 +80,8 @@ function do_work() {
   
     // Apply a title to the layout
     let layout = {
-      title: "Covid Analysis",
+      title: "Total Recovered and Death Cases for Top 10 Countries",
+      // title: `Covid Analysis for top 10 ${continent}`,
       barmode: "group",
       // Include margins in the layout so the x-tick labels display correctly
       margin: {
@@ -102,32 +105,52 @@ function do_work() {
     // filtered_data.sort((a, b) => (b["Total Cases"] - a["Total Cases"]));
   
     // extract the x & y values for our bar chart
-    let label_country = filtered_data.map(x => x.Country);
-    let parent_continent = filtered_data.map(x => x.Continent);
+
+    let label_country = filtered_data.map(x => x.label);
+    let parent_continent = filtered_data.map(x => x.parent);
+    // if all continets ar
+    // let id_continent = filtered_data.map(x => x.Continent);    
     let values_cases = filtered_data.map(x => x["Total Cases"]);
-    console.log(label_country)
-    console.log(parent_continent)
-    console.log(values_cases)
-  
+    console.log(label_country);
+    console.log("make_sunburst() parent_continent:");
+    console.log(parent_continent);
+    console.log(values_cases);
+     // Assign unique ids for each country or continent
+    //let ids = label_country.map((label, index) => `${parent_continent[index]}_${label}`);
     // Trace1 for the Launch Attempts
+    
     let trace1 = {
       type: "sunburst",
       labels: label_country,
+      // ids : ids,
       parents: parent_continent,
       values: values_cases,
-
-      outsidetextfont: { size: 20, color: "#377eb8" },
-      // leaf: { opacity: 0.4 },
+      branchvalues:"total",
+      // outsidetextfont: { size: 20, color: "#377eb8" },
+      // leaf: { opacity: 0.6 },
+      marker: {line: {width: 2}}
       
     };
-  
+    
+
   
     // // Create data array
     let data = [trace1];
   
     // Apply a title to the layout
     let layout = {
-      title: "Covid Analysis"
+      title: {
+        text: "Covid SunBurst Chart for the World",
+        colorway: ["#9CF4E4 ", "#83C9BC ", "#619F94", "#358F7F", "#2ECAAE", "#244B7F"]
+        // font: {
+        //     size: 16, // Adjust the font size if needed
+        //     color: 'black', // Specify the font color if needed
+        //     family: 'Arial', // Specify the font family if needed
+        //     weight: 'bold' // Make the font bold
+        // }
+      },
+
+     
       // barmode: "group",
       // Include margins in the layout so the x-tick labels display correctly
       // margin: {
@@ -136,8 +159,8 @@ function do_work() {
       //   b: 0,
       //   t: 50,
       // },
-      // width : 600,
-      // height :600
+      width : 550,
+      height :550
     };
   
     // Render the plot to the div tag with id "plot"
@@ -280,7 +303,21 @@ function do_work() {
     //         // Render the plot to the div tag with id "plot"
     //         Plotly.newPlot("bar_chart", data, layout);
         
-    //     }   
+    //     } 
+  //   document.getElementById("showMoreBtn").addEventListener("click", function() {
+  //     let tableRows = document.querySelectorAll("#data_table tbody tr");
+  //     let visibleRows = 10; // Number of rows to show initially
+  
+  //     for (let i = 0; i < tableRows.length; i++) {
+  //         if (i < visibleRows) {
+  //             tableRows[i].style.display = "table-row"; // Show the first set of rows
+  //         } else {
+  //             tableRows[i].style.display = "none"; // Hide the rest of the rows
+  //         }
+  //     }
+  
+  //     visibleRows += 10; // Increment the number of visible rows for the next click
+  // });  
   // event listener for CLICK on Button
   d3.select("#filter").on("click", do_work);
   

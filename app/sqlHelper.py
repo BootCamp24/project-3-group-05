@@ -72,27 +72,42 @@ class SQLHelper():
 
         # switch on user_region
         if user_continent == 'All':
+            continent_clause = """'All' AS "Continent","""
             where_clause = " 1=1"
         else:
+            continent_clause = 'Continent,'
             where_clause = f"Continent = '{user_continent}'"
 
         query = f"""
                     SELECT 
-                        "Total Cases",
-                        "Active Cases",
-                        "Total Recovered",
-                        Continent,
-                        Country,
-                        Population
-                                
+                        Continent as label,
+                        "" as parent,
+                        Sum("Total Cases") as "Total Cases"
+                        
                     From 
                         covid
                     Where
                         "Total Cases" >= {min_total_cases} AND
                     {where_clause}
-                    ;
-                    
+                    Group By
+                        Continent
+
+                    Union ALL
+
+                    SELECT 
+                        Country as label,
+                        "Continent" as parent,
+                        Sum("Total Cases") as "Total Cases"
+                    From 
+                        covid
+                    Where
+                        "Total Cases" >= {min_total_cases} AND
+                    {where_clause}
+                     Group By
+                        Country, Continent;
+
                     """
+        print(query)
         df = pd.read_sql(text(query), con = self.engine)
         data = df.to_dict(orient="records")
         return(data)
@@ -109,25 +124,25 @@ class SQLHelper():
             where_clause = f"Continent = '{user_continent}'"
 
         query = f"""
-                    SELECT
-                        "Population",
-                        "Total Test",
-                        "Total Cases",
-                        "Active Cases",
-                        "Total Deaths",
-                        "Total Recovered",
-                        Continent,
-                        Country
-                                            
-                    From 
-                        covid
-                    Where
-                        "Total Cases" >= {min_total_cases} AND
-                    {where_clause}
-                    Order by 
-                        "Total Cases" DESC;
-                    
-                    """
+                        SELECT
+                            "Population",
+                            "Total Test",
+                            "Total Cases",
+                            "Active Cases",
+                            "Total Deaths",
+                            "Total Recovered",
+                            Continent,
+                            Country
+                                                
+                        From 
+                            covid
+                        Where
+                            "Total Cases" >= {min_total_cases} AND
+                        {where_clause}
+                        Order by 
+                            "Total Cases" DESC;
+                        
+                        """
         df = pd.read_sql(text(query), con = self.engine)
         data = df.to_dict(orient="records")
         return(data)        
@@ -166,3 +181,24 @@ class SQLHelper():
         df = pd.read_sql(text(query), con = self.engine)
         data = df.to_dict(orient="records")
         return(data)
+    
+    # query = f"""
+    #                 SELECT
+    #                     "Population",
+    #                     "Total Test",
+    #                     "Total Cases",
+    #                     "Active Cases",
+    #                     "Total Deaths",
+    #                     "Total Recovered",
+    #                     Continent,
+    #                     Country
+                                            
+    #                 From 
+    #                     covid
+    #                 Where
+    #                     "Total Cases" >= {min_total_cases} AND
+    #                 {where_clause}
+    #                 Order by 
+    #                     "Total Cases" DESC;
+                    
+    #                 """
