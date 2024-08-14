@@ -62,7 +62,7 @@ function createMap(features) {
 
 function doWork() {
   // URL to the queried data
-  let url = `http://127.0.0.1:5000/api/v1.0/get_map`;
+  let url = `/api/v1.0/get_map`;
     
 
   d3.json(url).then(function (data) {

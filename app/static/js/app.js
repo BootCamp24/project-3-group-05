@@ -44,7 +44,9 @@ function do_work() {
       row.append("td").text(data_row["Total Test"]);
     }
     // Create the datatable
-    $('#data_table').DataTable();
+    $('#data_table').DataTable({
+      "order": [[3, 'desc']]
+    });
   }
   
   function make_stack(filtered_data) {
@@ -63,10 +65,10 @@ function do_work() {
       y: bar_y1,
       type: 'bar',
       marker: {
-        color: "#B5EFE5"
+        color: "#5A8B82"
       },
       text: bar_text,
-      name: "Total Recovered"
+      name: "Total Cases"
     };
   
     // Trace 2 for the Launch Successes
@@ -75,10 +77,10 @@ function do_work() {
       y: bar_y2,
       type: 'bar',
       marker: {
-        color: "#5A8B82"
+        color: "#B5EFE5"
       },
       text: bar_text,
-      name: "Total Deaths"
+      name: "Total Recovered"
     };
   
     // Create data array
@@ -86,7 +88,7 @@ function do_work() {
   
     // Apply a title to the layout
     let layout = {
-      title: "Total Recovered and Death Cases for Top 10 Countries",
+      title: "Total Cases and Total Recovered Cases for Top 10 Countries",
       // title: `Covid Analysis for top 10 ${continent}`,
       barmode: "group",
       // Include margins in the layout so the x-tick labels display correctly
@@ -133,7 +135,7 @@ function do_work() {
       values: values_cases,
       branchvalues:"total",
       marker: {
-        colors: ["#9CF4E4", "#83C9BC", "#619F94", "#358F7F", "#2ECAAE", "#244B7F"]
+        colors: ["#1E8975","#9CF4E4", "#83C9BC", "#619F94", "#358F7F", "#2ECAAE"]
       }
       
     };

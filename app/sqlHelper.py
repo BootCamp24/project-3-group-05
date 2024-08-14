@@ -49,6 +49,7 @@ class SQLHelper():
                         "Total Cases",
                         "Total Deaths",
                         "Total Recovered",
+                        "Active Cases",
                         Continent,
                         Country
                                             
